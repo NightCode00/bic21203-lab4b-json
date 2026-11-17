@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 4b - JSON Data Display</title>
+</head>
+<body>
+    <h2>Book Information</h2>
+    <div id="output"></div>
+    <div id="error-message" style="color: red;" role="alert"></div>
+
+    <script>
+        async function fetchBooks() {
+            const outputElement = document.getElementById('output');
+            const errorElement = document.getElementById('error-message');
+            
+            try {
+                const response = await fetch('books.json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const books = data.books;
+
+                const title1 = document.createElement('p');
+                title1.textContent = `First book title: ${books[0].title}`;
+                outputElement.appendChild(title1);
+
+                const author2 = document.createElement('p');
+                author2.textContent = `Second book author: ${books[1].author}`;
+                outputElement.appendChild(author2);
+
+                const genresGroup = document.createElement('div');
+                
+                const book1Genres = document.createElement('p');
+                book1Genres.textContent = `${books[0].title} — ${books[0].genres.join(', ')}`;
+                genresGroup.appendChild(book1Genres);
+
+                const book2Genres = document.createElement('p');
+                book2Genres.textContent = `${books[1].title} — ${books[1].genres.join(', ')}`;
+                genresGroup.appendChild(book2Genres);
+
+                outputElement.appendChild(genresGroup);
+
+            } catch (error) {
+                console.error("Failed to fetch books:", error);
+                errorElement.textContent = "Sorry, we couldn't load the book data. Please ensure the local server is running and books.json exists.";
+            }
+        }
+
+        fetchBooks();
+    </script>
+</body>
+</html>
